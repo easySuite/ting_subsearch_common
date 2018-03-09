@@ -10,13 +10,14 @@
  *
  * @param string $keys
  *   The search phrase.
+ * @param array $options
+ *   Search options.
  *
  * @return TingClientSearchResult
  *   The search result of the secondary search.
  */
 function ting_subsearch_common_do_secondary_search($keys, $options = array()) {
-
-  // Store search result temporarily. We need to make seconday search.
+  // Store search result temporarily. We need to make secondary search.
   $temporary_search_result = drupal_static('ting_search_results');
 
   // Reset the static containing search result to be able do new search.
@@ -55,9 +56,15 @@ function ting_subsearch_common_do_secondary_search($keys, $options = array()) {
  * Callback handler for suggested keys.
  *
  * Find suggested keys based on keys and callback.
+ *
+ * @param $keys
+ *   The search keys
+ * @param $callback
+ *   Callback function to handle suggested keys.
+ *
+ * @return bool
  */
 function ting_subsearch_common_suggested_keys($keys, $callback) {
-
   if (function_exists($callback)) {
     $suggestion = $callback($keys);
     if ($suggestion == FALSE || $suggestion == $keys) {
@@ -67,11 +74,19 @@ function ting_subsearch_common_suggested_keys($keys, $callback) {
       return $suggestion;
     }
   }
+
   return FALSE;
 }
 
 /**
  * Split query string.
+ *
+ * @TODO: Fill out parameter descriptions.
+ *
+ * @param $query
+ * @param array $original_query
+ *
+ * @return array
  */
 function ting_subsearch_common_query_params($query, $original_query = array()) {
   $result = array_merge($original_query, drupal_get_query_array($query));
